@@ -77,11 +77,13 @@ const ProblemPage = () => {
   const [problemList, setProblemList] = useState({ problems: [], error: "" });
   const [tagList, setTagList] = useState({ tags: [] });
   const [randomProblem, setRandomProblem] = useState(-1);
+  const [isRandomClicked, setIsRandomClicked] = useState(false);
   const [selected, setSelected] = useState(0);
 
   const [filterState, setFilterState] = useState(initFilterState);
   const [solved, setSolved] = useState(new Set<string>());
   const [attempted, setAttempted] = useState(new Set<string>());
+  
 
   const filterProblem = (problem: Problem) => {
     let containTags = false;
@@ -220,6 +222,8 @@ const ProblemPage = () => {
           selected={selected}
           setRandom={(num) => {
             setRandomProblem(num);
+            setIsRandomClicked(true);
+            setFilter({ ...filter, perPage: 1 }); // Set page size to 1 when random problem is selected
           }}
           theme={state.appState.theme}
         >
@@ -360,6 +364,7 @@ const ProblemPage = () => {
         </div>
       </div>
 
+    {!isRandomClicked && (
       <footer className={"pt-2 " + state.appState.theme.bg}>
         <Pagination
           totalCount={problemList.problems.length}
@@ -372,6 +377,7 @@ const ProblemPage = () => {
           }}
         />
       </footer>
+    )}
     </>
   );
 };
